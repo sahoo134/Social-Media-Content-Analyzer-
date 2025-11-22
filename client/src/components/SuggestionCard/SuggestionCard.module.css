@@ -1,0 +1,15 @@
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin: 10px 0 5px;
+  color: #333;
+}
+.card p, .card ul {
+  margin: 0 0 10px;
+}

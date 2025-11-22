@@ -1,0 +1,11 @@
+.uploader {
+  border: 2px dashed #4a90e2;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.uploader:hover {
+  background: #f0f8ff;
+}

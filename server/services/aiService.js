@@ -1,50 +1,106 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { z } from "zod";
+import { RunnableParallel } from "@langchain/core/runnables";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { StringOutputParser } from "@langchain/core/output_parsers";
-import { geminiConfig } from "../config/geminiClient.js";
+import { StructuredOutputParser } from "@langchain/core/output_parsers";
+import {geminiConfig} from "../config/geminiClient.js"
 
-export async function analyzeTextWithLangChain(text) {
-  const model = new ChatGoogleGenerativeAI(geminiConfig);
+// ------------------------
+// 🌟 LLM Model
+// ------------------------
+// const model = new ChatGoogleGenerativeAI(geminiConfig);
 
-  const prompt = PromptTemplate.fromTemplate(`
-You are a social media strategist. Return ONLY valid JSON with these keys:
+const model = new ChatGoogleGenerativeAI(geminiConfig);
 
-- short_summary: string
-- recommended_hashtags: array of 6-10 strings (include #)
-- improved_post: string (optimized <280 chars)
-- three_ctas: array of 3 strings
-- readability_tips: array of short tips
+// ------------------------
+// 🌟 Zod Schemas
+// ------------------------
+const shortSummarySchema = z.object({
+  short_summary: z.string(),
+});
 
-Text:
-""" 
-{post}
-"""
+const hashtagsSchema = z.object({
+  recommended_hashtags: z.array(z.string()).min(6).max(10),
+});
 
-Return ONLY JSON. No explanation.
+const improvedPostSchema = z.object({
+  improved_post: z.string(),
+});
+
+const ctaSchema = z.object({
+  three_ctas: z.array(z.string()).length(3),
+});
+
+const readabilitySchema = z.object({
+  readability_tips: z.array(z.string()),
+});
+
+// ------------------------
+// 🌟 Structured Parsers
+// ------------------------
+const shortSummaryParser = StructuredOutputParser.fromZodSchema(shortSummarySchema);
+const hashtagsParser = StructuredOutputParser.fromZodSchema(hashtagsSchema);
+const improvedPostParser = StructuredOutputParser.fromZodSchema(improvedPostSchema);
+const ctaParser = StructuredOutputParser.fromZodSchema(ctaSchema);
+const readabilityParser = StructuredOutputParser.fromZodSchema(readabilitySchema);
+
+// ------------------------
+// 🌟 Prompt Builder
+// ------------------------
+const makePrompt = (parser) =>
+  PromptTemplate.fromTemplate(`
+You are a social media strategist.
+Return ONLY valid JSON.
+
+{format_instructions}
+
+Analyze this post:
+
+"{text}"
 `);
 
-  const chain = prompt
-    .pipe(model)
-    .pipe(new StringOutputParser());
+// ------------------------
+// 🌟 Function to run each parser/model
+// ------------------------
+async function runChain(parser, text) {
+  const prompt = await makePrompt(parser);
+  const chain = prompt.pipe(model).pipe(parser);
 
-  try {
-    const raw = await chain.invoke({ post: text });
-    const first = raw.indexOf("{");
-    const cleaned = raw.slice(first).trim();
-    return JSON.parse(cleaned);
-  } catch (e) {
-    console.error("LLM JSON parse error, returning fallback:", e);
-    return fallbackAnalysis(text);
-  }
+  return chain.invoke({
+    text,
+    format_instructions: parser.getFormatInstructions(),
+  });
 }
 
-function fallbackAnalysis(text) {
-  const preview = text.split(" ").slice(0, 20).join(" ");
-  return {
-    short_summary: preview,
-    recommended_hashtags: ["#socialmedia", "#engagement"],
-    improved_post: preview + "...",
-    three_ctas: ["Follow us", "Share this", "Comment"],
-    readability_tips: ["Use short sentences", "Add line breaks", "Include a CTA"]
-  };
+// ------------------------
+// 🌟 Execute All Tasks in Parallel
+// ------------------------
+const parallelChain = new RunnableParallel({
+  steps: {
+    short_summary: (text) => runChain(shortSummaryParser, text),
+    recommended_hashtags: (text) => runChain(hashtagsParser, text),
+    improved_post: (text) => runChain(improvedPostParser, text),
+    three_ctas: (text) => runChain(ctaParser, text),
+    readability_tips: (text) => runChain(readabilityParser, text),
+  }
+});
+
+// ------------------------
+// 🌟 Final Combined Function
+// ------------------------
+export async function analyzeTextWithLangChain(text) {
+  try {
+    const result = await parallelChain.invoke(text);
+   console.log("result", result);
+    return {
+      ...result.short_summary,
+      ...result.recommended_hashtags,
+      ...result.improved_post,
+      ...result.three_ctas,
+      ...result.readability_tips,
+    };
+  } catch (err) {
+    console.error("❌ Structured Gemini AI Error:", err);
+    throw new Error("Gemini structured output failed");
+  }
 }
