@@ -1,5 +1,34 @@
+/* GLOBAL DARK THEME */
+:root {
+  --bg-dark: #0d0f17;
+  --card-dark: #141825;
+  --accent-blue: #3a7bff;
+  --accent-blue-glow: rgba(58, 123, 255, 0.6);
+  --text-light: #e4e7f5;
+  --text-muted: #a0a4b8;
+  --border-dark: #1f2435;
+}
+
 .app {
-  background: #f5f5f5;
+  width: 900px;                      /* FIXED WIDTH */
+  max-width: 95%;                    /* Allow shrink on small screens */
+
+  margin: 0 auto;                    /* CENTER */
+  padding: 40px;
+
   min-height: 100vh;
-  padding: 20px;
+  background: radial-gradient(circle at top, #182033, #0d0f17 70%);
+  color: var(--text-light);
+
+  border: 1px solid var(--border-dark);
+  border-radius: 16px;
+
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
+
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

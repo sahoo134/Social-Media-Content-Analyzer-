@@ -10,6 +10,8 @@ export async function handleUpload(req, res, next) {
     if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
     const filePath = req.file.path;
+    console.log("go to path: ", filePath);
+    
     let text = "";
     let meta = { originalName: req.file.originalname, size: req.file.size };
 

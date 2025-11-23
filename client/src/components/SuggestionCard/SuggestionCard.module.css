@@ -1,15 +1,37 @@
+:root {
+  --blue: #3a7bff;
+  --blue-glow: rgba(58, 123, 255, 0.4);
+}
+
 .card {
-  background: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 28px;
+  margin-top: 25px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+
+  backdrop-filter: blur(8px);
+  animation: cardFadeIn 0.7s ease-out;
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .card h3 {
-  margin: 10px 0 5px;
-  color: #333;
+  color: var(--accent-blue);
+  margin-bottom: 8px;
+  font-size: 1.3rem;
 }
-.card p, .card ul {
-  margin: 0 0 10px;
+
+.card p, .card li {
+  color: var(--text-light);
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+ul {
+  padding-left: 18px;
 }

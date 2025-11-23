@@ -35,7 +35,16 @@ const FileUploader = ({ onFileSelect, loading }) => {
         onChange={handleChange}
         accept=".pdf,image/*"
       />
-      {loading ? <p>Uploading...</p> : <p>Drag & drop a file or click to upload</p>}
+      {loading ? (
+        <p>
+          Uploading
+          <span className={styles.dot}>.</span>
+          <span className={styles.dot}>.</span>
+          <span className={styles.dot}>.</span>
+        </p>
+      ) : (
+        <p>Drag & drop a file or click to upload</p>
+      )}
     </div>
   );
 };

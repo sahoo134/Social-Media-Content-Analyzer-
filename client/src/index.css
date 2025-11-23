@@ -1,0 +1,119 @@
+/* ================================
+   GLOBAL NEON DARK THEME
+=================================*/
+:root {
+  --bg-dark: #0d0f17;
+  --bg-gradient: radial-gradient(circle at top, #182033, #0d0f17 70%);
+  --text-light: #e4e7f5;
+  --text-muted: #a0a4b8;
+
+  --blue: #3a7bff;
+  --blue-glow: rgba(58, 123, 255, 0.55);
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+
+  color-scheme: dark;
+  background: var(--bg-gradient);
+  color: var(--text-light);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ================================
+   BODY RESET
+=================================*/
+body {
+  margin: 0;
+  padding: 0;
+
+  min-width: 320px;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  background: var(--bg-gradient);
+  color: var(--text-light);
+
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ================================
+   HEADINGS
+=================================*/
+h1, h2, h3 {
+  font-family: inherit;
+  color: var(--blue);
+  text-shadow: 0 0 10px var(--blue-glow);
+}
+
+/* ================================
+   LINKS
+=================================*/
+a {
+  color: var(--blue);
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+a:hover {
+  color: #6ca1ff;
+  text-shadow: 0 0 8px var(--blue-glow);
+}
+
+/* ================================
+   BUTTONS
+=================================*/
+button {
+  border-radius: 8px;
+  border: 1px solid #1f2435;
+  padding: 0.6em 1.2em;
+
+  background: #141825;
+  color: var(--text-light);
+
+  font-size: 1rem;
+  cursor: pointer;
+
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+
+  transition: 0.25s ease;
+}
+
+button:hover {
+  border-color: var(--blue);
+  box-shadow: 0 0 15px var(--blue-glow);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 18px var(--blue-glow);
+}
+
+/* ================================
+   LIGHT THEME OVERRIDE (OPTIONAL)
+=================================*/
+@media (prefers-color-scheme: light) {
+  :root {
+    background: #ffffff;
+    color: #213547;
+  }
+
+  button {
+    background: #f9f9f9;
+    color: #213547;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+}
