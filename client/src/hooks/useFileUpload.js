@@ -7,6 +7,7 @@ export function useFileUpload() {
   const [error, setError] = useState(null);
 
   const handleUpload = async (file) => {
+    if (!file) return; // Prevent uploading null
     setLoading(true);
     setError(null);
     try {
@@ -19,5 +20,12 @@ export function useFileUpload() {
     }
   };
 
-  return { loading, result, error, handleUpload };
+  // Reset function to clear all states
+  const reset = () => {
+    setResult(null);
+    setError(null);
+    setLoading(false);
+  };
+
+  return { loading, result, error, handleUpload, reset };
 }
