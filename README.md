@@ -1,15 +1,37 @@
-# Social Media Content Analyzer - Backend
+# Social Media Content Analyzer – Backend
 
-## Setup
-1. Copy `.env.example` -> `.env` and fill GEMINI_API_KEY
-2. Install dependencies: `npm install`
-3. Start server: `npm run dev` (nodemon) or `npm start`
+An AI-powered backend service that extracts text from PDF and image files and generates social media content suggestions using Gemini AI and LangChain.
 
-## Endpoints
-POST /api/upload
-- form-data key: `file` (PDF or Image)
-- Response: { success, meta, extractedText, suggestions }
+---
 
-## Notes
-- Uploaded files saved to `uploads/` and auto-deleted after extraction
-- AI analysis via LangChain + ChatGoogleGenerativeAI (Gemini)
+## 🚀 Features
+
+- Upload and process **PDF** and **Image** files
+- Extract text from PDFs using `pdf-parse`
+- OCR text extraction from images using `tesseract.js`
+- AI-powered analysis with **Google Gemini**
+- Structured JSON responses using **Zod**
+- Parallel AI processing with **LangChain RunnableParallel**
+- Automatic file cleanup after processing
+
+---
+
+## 🛠️ Tech Stack
+
+- Node.js
+- Express.js
+- LangChain
+- Google Gemini (ChatGoogleGenerativeAI)
+- Multer
+- pdf-parse
+- tesseract.js
+- Zod
+
+---
+
+## ⚙️ Setup Instructions
+
+1. Clone the repository
+   ```bash
+   git clone [https://github.com/your-username/social-media-content-analyzer.git](https://github.com/sahoo134/Social-Media-Content-Analyzer-.git)
+   cd social-media-content-analyzer

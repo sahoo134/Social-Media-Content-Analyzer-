@@ -5,16 +5,10 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import {geminiConfig} from "../config/geminiClient.js"
 
-// ------------------------
-// 🌟 LLM Model
-// ------------------------
-// const model = new ChatGoogleGenerativeAI(geminiConfig);
+
 
 const model = new ChatGoogleGenerativeAI(geminiConfig);
 
-// ------------------------
-// 🌟 Zod Schemas
-// ------------------------
 const shortSummarySchema = z.object({
   short_summary: z.string(),
 });
@@ -91,7 +85,6 @@ const parallelChain = new RunnableParallel({
 export async function analyzeTextWithLangChain(text) {
   try {
     const result = await parallelChain.invoke(text);
-   console.log("result", result);
     return {
       ...result.short_summary,
       ...result.recommended_hashtags,
